@@ -26,27 +26,24 @@ def compute_maxcut_costs(G):
 def qaoa_initial_state(qc, G):
     for q in range(G.number_of_nodes()):
         qc.h(q)
-    return qc
 
 def qaoa_cost_unitary(qc, qreg, costs, gamma):
     UQ = DiagonalGate(np.exp(-1j * gamma * costs))
     qc.append(UQ, qreg)
-    return qc
 
 def qaoa_mixing_unitary(qc, G, beta):
     for q in range(G.number_of_nodes()):
         qc.rx(2 * beta, q)
-    return qc
 
 def make_qaoa_circuit(params, layers, G, costs):
     qc = QuantumCircuit(G.number_of_nodes())
     gammas, betas = np.split(params, 2)
     qreg = range(G.number_of_nodes())
 
-    qc = qaoa_initial_state(qc, G)
+    qaoa_initial_state(qc, G)
     for layer in range(layers):
-        qc = qaoa_cost_unitary(qc, qreg, costs, gammas[layer])
-        qc = qaoa_mixing_unitary(qc, G, betas[layer])
+        qaoa_cost_unitary(qc, qreg, costs, gammas[layer])
+        qaoa_mixing_unitary(qc, G, betas[layer])
 
     qc.save_state()
     return qc
@@ -61,7 +58,7 @@ def qaoa_objective_function(input_parameters, backend, layers, G, costs):
 
 if __name__ == "__main__":
     n = 15
-    layers = 16
+    layers = 8
     G = nx.gnp_random_graph(n, 0.5, seed=42)
     costs = compute_maxcut_costs(G)
 
