@@ -13,7 +13,7 @@ if len(sys.argv) != 2:
 stats = pd.read_csv(sys.argv[1])
 
 # ------------------------------------------------------------------
-# 1) Wall-clock utilisation
+# 1) Compute program runtime and GPU utilisation.
 # ------------------------------------------------------------------
 t_start = stats['BeginNs'].min()
 t_end   = stats['EndNs'].max()
@@ -22,12 +22,16 @@ busy_ns = stats['DurationNs'].sum()
 wall_util = 100.0 * busy_ns / wall_ns
 
 # ------------------------------------------------------------------
-# 2) Quick-look PMCs  (we need the *metrics* CSV for this part)
+# 2) Process PMCs data  (we need the *metrics* CSV for this part)
 # ------------------------------------------------------------------
 metrics_csv = sys.argv[1].replace('.stats.csv', '.csv')
 pmc_cols = ["GPUBusy", "VALUUtilization", "MemUnitBusy", "L2CacheHit"]
-pmc = pd.read_csv(metrics_csv)[pmc_cols].mean()
+# Average over program run-time.
+pmc = pd.read_csv(metrics_csv)[pmc_cols].mean() 
 
+#-------------------------------------------------------------------
+# 3) Summarise Results.
+#-------------------------------------------------------------------
 print(f"""
 Wall-clock GPU utilisation : {wall_util:5.1f} %
 Avg GPUBusy                : {pmc['GPUBusy']         :5.1f} %
@@ -37,10 +41,10 @@ Avg L2CacheHit             : {pmc['L2CacheHit']      :5.1f} %
 """)
 
 # ------------------------------------------------------------------
-# 3) Simple verdict
+# 3) "Rule of thumb" verdict.
 # ------------------------------------------------------------------
 if wall_util < 60:
-    verdict = "GPU may be under-used."
+    verdict = "GPU Under-utilised."
 elif pmc["VALUUtilization"] >= 70 and pmc["MemUnitBusy"] <= 50:
     verdict = "Compute-bound."
 elif pmc["MemUnitBusy"] >= 70 and pmc["VALUUtilization"] <= 50 and pmc["L2CacheHit"] < 60:
