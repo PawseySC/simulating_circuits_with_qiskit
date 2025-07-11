@@ -26,22 +26,22 @@ pmc: MemUnitBusy      # memory-pipeline load
 pmc: L2CacheHit       # cache-hit ratio
 ```
 
-Run your programme through rocprof like so:
+Run your program through rocprof like so:
 
 ```bash
-rocprof -i metrics_input.txt      \   # load the PMC list
-        --stats --basenames on    \   # add timing CSV, shorten kernel names
+rocprof -i metrics_input.txt      \   # PMC list
+        --stats --basenames on    \   # export timing CSV, shorten kernel names
         -o results                \   # prefix for the output CSVs
         python 4_2_qaoa_partial_circuit_simulation_gpu.py
 ```
 
-rocprof creates two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / occupancy).
+rocprof creates two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy).
 
 ## What do the counters mean?
 
-| Counter             | In plain English                                                                  |
+| Counter             | Definition                                                                        |
 | ------------------- | --------------------------------------------------------------------------------- |
-| **GPUBusy**         | *kernel time* with at least one Compute Unit active.                         |
+| **GPUBusy**         | *kernel time* with at least one Compute Unit active.                              |
 | **VALUUtilization** | How busy the arithmetic units are (% of active threads issuing ALU instructions). |
 | **MemUnitBusy**     | How saturated the global-memory pipeline is.                                      |
 | **L2CacheHit**      | Fraction of memory requests served from on-chip L2 (locality).                    |
@@ -54,11 +54,11 @@ rocprof creates two CSV files – `results.csv` (the four counters) and `results
 
 #### Glossary
 
-| Term                  | Quick definition                                                  |
+| Term                  | Definition                                                        |
 | --------------------- | ----------------------------------------------------------------- |
-| **Kernel**            | One GPU function launch executed by many threads.                 |
+| **Kernel**            | A GPU function that is executed in-parallel on many threads.      |
 | **CU (Compute Unit)** | AMD’s hardware block that schedules & runs threads (≈ NVIDIA SM). |
-| **VALU**              | Vector ALU that performs SIMD maths inside a CU.                  |
+| **VALU**              | Vector ALU that performs vectorised math operations inside a CU.  |
 | **ALU**               | Generic arithmetic-logic unit (VALU is the vector version).       |
-| **Threads**           | Lightweight contexts that run in lock-step batches (wavefronts).  |
-| **L2 Cache**          | On-die cache shared by all CUs, reducing HBM/DRAM traffic.        |
+| **Threads**           | Processes that run in-parralell in lock-step batches (wavefronts).|
+| **L2 Cache**          | On-die cache (memory) shared by all CUs.                          |
