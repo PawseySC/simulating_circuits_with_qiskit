@@ -1,5 +1,5 @@
 """
-gpu_wall_util.py  <metrics_input.stats.csv>
+gpu_util.py  <metrics_input.stats.csv>
 
 Prints the fraction of wall-clock time the GPU spent executing
 kernels + derived metrics
