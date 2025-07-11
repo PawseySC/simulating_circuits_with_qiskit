@@ -4,6 +4,16 @@ To use GPU acceleration on Setonix first setup a GPU-enabled Qiskit-Aer python v
 
 https://github.com/PawseySC/qiskit_aer_rocm
 
+# Starting An Interactive Session
+
+```bash
+salloc -N 1 --gpus=1 -p gpu --account=${PAWSEY_PROJECT}-gpu
+```
+
+Note that the `-gpu` suffix after the project ID is required to request time on the `gpu` or `gpu-dev` SLURM partitions.
+
+# How to Modify Your Code
+
 To enable GPU acceleration.
 
 ```python
@@ -31,8 +41,8 @@ Run your program through rocprof like so:
 ```bash
 rocprof -i metrics_input.txt      \   # PMC list
         --stats --basenames on    \   # export timing CSV, shorten kernel names
-        -o results                \   # prefix for the output CSVs
-        python 4_2_qaoa_partial_circuit_simulation_gpu.py
+        -o results.csv            \   # prefix for the output CSVs
+        python 4_1_baseline_qaoa.py
 ```
 
 The out will be two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy).
