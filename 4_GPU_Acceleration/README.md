@@ -36,7 +36,7 @@ rocprof -i metrics_input.txt      \   # PMC list
 ```
 
 The out will be two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy).
-These files aren't very human-readable, `gpu_util.py` parses the results using Pandas and reports useful figures of merit:
+These files aren't very human-readable, `gpu_util.py` parses the rocprof output using Pandas and reports useful figures of merit:
 
 ```bash
 python gpu_util.py results.stats.csv
