@@ -35,7 +35,12 @@ rocprof -i metrics_input.txt      \   # PMC list
         python 4_2_qaoa_partial_circuit_simulation_gpu.py
 ```
 
-rocprof creates two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy).
+The out will be two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy).
+These files aren't very human-readable, `gpu_util.py` parses the results using Pandas and reports useful figures of merit:
+
+```bash
+python gpu_util.py results.stats.csv
+```
 
 ## What do the counters mean?
 
