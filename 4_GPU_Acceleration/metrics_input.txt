@@ -1,0 +1,5 @@
+# metrics_input.txt
+pmc: GPUBusy          # overall device activity
+pmc: VALUUtilization  # ALU utilisation
+pmc: MemUnitBusy      # memory-pipeline load
+pmc: L2CacheHit       # cache-hit ratio
