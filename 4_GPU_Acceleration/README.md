@@ -13,8 +13,8 @@ est = Estimator(backend_options={"device": "GPU"})   # primitives
 
 ## Profiling
 
-Scalene is great for CPU-side Python, but it has no hooks into AMD GPUs.
-Instead we’ll use **rocprof** – a ROCm profiler that can grab both time stamps and low-level hardware counters.
+Scalene can be used on Setonix for CPU-side Python, but it has no hooks into AMD GPUs.
+Instead we’ll use **rocprof** – a ROCm profiler that can record time stamps and access low-level hardware counters.
 
 A **metric file** tells rocprof exactly which performance-monitor counters (PMCs) to sample for every kernel launch.
 
