@@ -36,20 +36,18 @@ pmc: MemUnitBusy      # memory-pipeline load
 pmc: L2CacheHit       # cache-hit ratio
 ```
 
-Run your program through rocprof like so:
+The `collect_gpu_prof_data.sh` script can be used to time the **wall time** of the program and collect profiling data using rocprof, passing the program to profile as an arguement:
 
 ```bash
-rocprof -i metrics_input.txt      \   # PMC list
-        --stats --basenames on    \   # export timing CSV, shorten kernel names
-        -o results.csv            \   # prefix for the output CSVs
-        python 4_1_baseline_qaoa.py
+bash collect_gpu_prof_data.sh 4_1_baseline_qaoa.py
 ```
 
-The out will be two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy).
-These files aren't very human-readable, `gpu_util.py` parses the rocprof output using Pandas and reports useful figures of merit:
+It will create two CSV files – `results.csv` (the four counters) and `results.stats.csv` (per-kernel timing / memory occupancy) and a file containing the program wall time `wall.txt`.
+
+These files aren't very human-readable, `gpu_summary.py` parses the rocprof output using Pandas and reports useful figures of merit:
 
 ```bash
-python gpu_util.py results.stats.csv
+python gpu_summary.py results.csv
 ```
 
 ## What do the counters mean?
